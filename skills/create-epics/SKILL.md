@@ -59,10 +59,11 @@ Incorporate feedback. Only proceed to Step 5 once the user confirms the breakdow
 
 ### Local mode
 
-Write epics to `epics.md` in the most relevant directory:
-- If the input doc lives inside a service directory, write `epics.md` there.
+Write epics to a numbered `NN-epics.md` file (zero-padded, e.g. `01-epics.md`) in the most relevant directory:
+- If the input doc lives inside a service directory, write it there.
 - If the input covers the whole platform, write to the repo root or `docs/`.
-- If `epics.md` already exists, append new epics below a `---` divider with a header noting the date they were added. Do not overwrite existing content.
+- Determine `NN` by finding the highest existing `NN-epics.md` in that directory and incrementing by 1, zero-padded to 2 digits (e.g. `01-epics.md`, `02-epics.md`, ... `10-epics.md`). If none exist, start at `01-epics.md`.
+- Each run creates a new numbered file — do not append to or overwrite a previous `NN-epics.md`.
 
 Format: use the Epic template from `TEMPLATE.md`, one `##` section per epic, in priority order (highest-value / least-blocked first).
 
