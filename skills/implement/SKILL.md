@@ -49,21 +49,31 @@ Each issue gets its own branch — never combine multiple issues on one branch, 
 
 For each issue, in order:
 
-1. **Write failing tests first**, before any implementation code:
+1. **Detect the language(s) in play** for the service(s) being touched and read the matching reference before writing any code or tests:
+   - `pyproject.toml`, `requirements.txt`, `setup.py`, or `Pipfile` present → read `references/python.md`
+   - `package.json` present → read `references/node.md`
+   - Both present (polyglot repo/monorepo) → read both, and apply each to the service(s) written in that language.
+   - Use the reference's build/test/lint/type-check commands throughout this step and Step 5 instead of guessing generic commands.
+2. **Build the service's Docker image and run all install/compile/build steps inside it** — never install dependencies or compile on the host:
+   - Build (or rebuild, if the Dockerfile or lockfile changed since the last build) the image: `docker build -t <service>-dev .`, or `docker compose build <service>` if the repo has a compose file.
+   - Run the install and compile/build commands from the language reference's "Containerized install & build" section via `docker run --rm -v "$(pwd):/app" -w /app <service>-dev <command>` (or `docker compose run --rm <service> <command>` if a compose file exists — prefer it, since it already carries the service's networking and env vars).
+   - If the service has no Dockerfile yet, this step blocks: create one first (per the Dockerfile requirement below) rather than falling back to a host install.
+   - Test, lint, and type-check commands also run through the same containerized invocation in the remaining items below and in Step 5, since they depend on the environment installed here.
+3. **Write failing tests first**, before any implementation code:
    - **Positive tests** — expected inputs produce expected outcomes per the issue's acceptance criteria.
    - **Negative tests** — invalid input, error conditions, edge cases, and failure modes the issue implies.
    - Confirm the tests fail for the right reason (missing implementation, not a typo) before writing implementation.
-2. **Mock external calls.** Any call crossing a service boundary — other microservices, third-party APIs, databases, message queues, filesystems outside the service — must be mocked in tests. Never let tests depend on live external systems.
-3. **Implement the minimum code to pass the tests**, then refactor for clarity without changing behavior.
-4. Follow project standards from `CLAUDE.md`:
+4. **Mock external calls.** Any call crossing a service boundary — other microservices, third-party APIs, databases, message queues, filesystems outside the service — must be mocked in tests. Never let tests depend on live external systems.
+5. **Implement the minimum code to pass the tests**, then refactor for clarity without changing behavior.
+6. Follow project standards from `CLAUDE.md`:
    - Every microservice: its own directory (monorepo layout), a Dockerfile, OpenTelemetry tracing/metrics (Prometheus-compatible), and — if it exposes an API — an OpenAPI/Swagger spec kept in sync with the change.
-5. Run that issue's test suite and confirm it's green before moving to the next issue in the dependency order from Step 2.
+7. Run that issue's test suite (inside the container, per item 2 above) and confirm it's green before moving to the next issue in the dependency order from Step 2.
 
 ---
 
 ## Step 5 — Full validation after each issue
 
-After an issue's own tests pass, run the full test suite for the affected service(s) (and any dependent services if this issue unblocked them) to confirm nothing regressed and the issue's acceptance criteria are met end-to-end. Report pass/fail plainly — do not mark an issue done on a red suite.
+After an issue's own tests pass, run the full test suite for the affected service(s) (and any dependent services if this issue unblocked them), via the same containerized invocation from Step 4, to confirm nothing regressed and the issue's acceptance criteria are met end-to-end. Report pass/fail plainly — do not mark an issue done on a red suite.
 
 If implementing an Epic, repeat Steps 3–5 for each issue in dependency order. After the last issue, run the full suite across all touched services once more as an Epic-level acceptance check.
 
@@ -106,4 +116,5 @@ Once an issue or Epic is fully implemented, reviewed, and (if accepted) publishe
 - Never push to a remote or open a PR/MR without explicit user acceptance in Step 7.
 - Never silently discard or stash uncommitted work found at branch-start time — ask first.
 - Respect dependency order across an Epic's issues even if it's less convenient than an alternate order.
+- Never install dependencies, compile, or build on the host — those steps always run inside the service's Docker container (Step 4.2).
 </content>
