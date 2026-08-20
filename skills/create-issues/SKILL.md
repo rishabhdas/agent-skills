@@ -1,3 +1,8 @@
+---
+name: create-issues
+description: Decompose an Epic into independently-developable implementation issues, each small enough to build in isolation, with acceptance criteria, labels, and blocking relationships, created via gh/glab or as local numbered Markdown files. Use when the user wants to break an epic down into issues or tickets, split work into implementable units, or asks to "create issues" from an epic.
+---
+
 # Create Issues Skill
 
 You are executing the `create-issues` skill. Read these instructions fully before taking any action.

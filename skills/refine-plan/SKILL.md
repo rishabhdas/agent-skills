@@ -1,3 +1,8 @@
+---
+name: refine-plan
+description: Run an interactive, one-question-at-a-time brainstorming session against an existing plan or spec to surface missing scenarios, corner cases, error paths, and ambiguities, then produce a new spec version capturing every decision. Use when the user wants to review, refine, pressure-test, or find gaps in a plan or spec before implementation.
+---
+
 # Refine Plan Skill
 
 You are executing the `refine-plan` skill. Read these instructions fully before taking any action.

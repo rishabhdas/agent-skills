@@ -1,3 +1,8 @@
+---
+name: create-epics
+description: Turn a spec, BRD, PRD, or requirements document into logical delivery Epics with objectives, component-level scope, and acceptance criteria, written as GitHub issues, GitLab epics, or a local epics.md. Use when the user wants to break a spec or business requirement into epics, plan a feature's delivery units, or asks to "create epics" from a document.
+---
+
 # Create Epics Skill
 
 You are executing the `create-epics` skill. Read these instructions fully before taking any action.

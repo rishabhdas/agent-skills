@@ -1,3 +1,8 @@
+---
+name: implement
+description: Implement an issue, an Epic's linked issues in dependency order, or inline instructions — each on its own branch, following Test-Driven Development, ending with user review before anything is published upstream. Use when the user asks to implement or build a specific issue, ticket, or epic, or wants work done TDD-style on a dedicated branch.
+---
+
 # Implement Skill
 
 You are executing the `implement` skill. Read these instructions fully before taking any action.
